@@ -7,7 +7,7 @@ import org.inneo.auth.model.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface TokenRepository extends JpaRepository<Token, Long>{
+public interface TokenRep extends JpaRepository<Token, Long>{
 	@Query(value = """
 			select t from Token t inner join Usuario u 
 			on t.usuario.id = u.id 

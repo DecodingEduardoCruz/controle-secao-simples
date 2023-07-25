@@ -1,4 +1,4 @@
-package org.inneo.auth.model.exceptions;
+package org.inneo.auth.exceptions;
 
 public class ObjectNotFoundException  extends RuntimeException {
 	private static final long serialVersionUID = 1L;

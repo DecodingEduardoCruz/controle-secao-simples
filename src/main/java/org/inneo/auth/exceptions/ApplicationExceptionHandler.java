@@ -1,4 +1,4 @@
-package org.inneo.auth.model.exceptions;
+package org.inneo.auth.exceptions;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolationException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -80,6 +81,14 @@ public class ApplicationExceptionHandler {
     public DefaultExceptions Exception(ConversionFailedException ex) {	
     	return DefaultExceptions.construir(BAD_REQUEST.value(), "Não foi possivel converter um objetoEnum ou parametro de requisição.", ex.getMessage());    
     }
+    
+    @ResponseStatus(BAD_REQUEST)
+    @ResponseBody
+    @ExceptionHandler(ExpiredJwtException.class)
+    public DefaultExceptions Exception(ExpiredJwtException ex) {	
+    	return DefaultExceptions.construir(BAD_REQUEST.value(), "Token expirado.", ex.getMessage());    
+    }
+    
 
     private DefaultExceptions processFieldErrors(List<org.springframework.validation.FieldError> fieldErrors, String messageEx) {
     	DefaultExceptions exception = DefaultExceptions.construir(BAD_REQUEST.value(), "Validation error", messageEx);

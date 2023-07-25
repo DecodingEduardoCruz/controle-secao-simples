@@ -3,7 +3,7 @@ package org.inneo.auth.config;
 import org.springframework.context.annotation.Configuration;
 import lombok.RequiredArgsConstructor;
 
-import org.inneo.auth.repository.UsuarioRepository;
+import org.inneo.auth.repository.UsuarioRep;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,11 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig{
-     private final UsuarioRepository repository;
+     private final UsuarioRep usuarioRep;
 
      @Bean
      public UserDetailsService userDetailsService() {
-       return username -> repository.findByUsername(username)
+       return username -> usuarioRep.findByUsername(username)
            .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado"));
      }
 

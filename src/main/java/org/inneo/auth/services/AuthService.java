@@ -5,16 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 import org.inneo.auth.config.JwtService;
-import org.inneo.auth.dtos.AuthenticationRequest;
-import org.inneo.auth.dtos.AuthenticationResponse;
+import org.inneo.auth.dtos.AuthRequest;
+import org.inneo.auth.dtos.AuthResponse;
 import org.inneo.auth.dtos.RegisterRequest;
+import org.inneo.auth.exceptions.ObjectDefaultException;
 import org.inneo.auth.model.enums.TokenType;
-import org.inneo.auth.model.exceptions.ObjectDefaultException;
 import org.inneo.auth.model.role.Role;
 import org.inneo.auth.model.token.Token;
 import org.inneo.auth.model.usuario.Usuario;
-import org.inneo.auth.repository.TokenRepository;
-import org.inneo.auth.repository.UsuarioRepository;
+import org.inneo.auth.repository.TokenRep;
+import org.inneo.auth.repository.UsuarioRep;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,14 +24,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
-	private final UsuarioRepository usuarioRep;
-	private final TokenRepository tokenRepository;
+public class AuthService {
+	private final UsuarioRep usuarioRep;
+	private final TokenRep tokenRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 	
-	public AuthenticationResponse register(RegisterRequest request) {
+	public AuthResponse register(RegisterRequest request) {
 		
 		if(request.getUsername() == null && usuarioRep.findByUsername(request.getUsername()) != null) {
 			throw new ObjectDefaultException("Username indisponível.");
@@ -46,12 +46,12 @@ public class AuthenticationService {
 	    var jwtToken = jwtService.generateToken(usuario);
 	    saveUsuarioToken(savedUser, jwtToken);
 	    
-	    return AuthenticationResponse.builder()
+	    return AuthResponse.builder()
 	        .token(jwtToken)
 	        .build();
 	  }
 
-	  public AuthenticationResponse authenticate(AuthenticationRequest request) {
+	  public AuthResponse authenticate(AuthRequest request) {
 	    authenticationManager.authenticate(
 	        new UsernamePasswordAuthenticationToken(
 	            request.getUsername(),
@@ -63,7 +63,7 @@ public class AuthenticationService {
 	    var jwtToken = jwtService.generateToken(usuario);
 	    revokeAllUsuarioTokens(usuario);
 	    saveUsuarioToken(usuario, jwtToken);
-	    return AuthenticationResponse.builder()
+	    return AuthResponse.builder()
 	        .token(jwtToken)
 	        .build();
 	  }

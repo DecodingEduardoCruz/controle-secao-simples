@@ -1,4 +1,4 @@
-package org.inneo.auth.model.exceptions;
+package org.inneo.auth.exceptions;
 
 import lombok.Data;
 

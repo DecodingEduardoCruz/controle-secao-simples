@@ -1,8 +1,7 @@
-package org.inneo.auth.model.exceptions;
+package org.inneo.auth.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
